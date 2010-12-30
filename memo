@@ -1,0 +1,9 @@
+66 6d 74 20 # Chunk ID        : "fmt "
+12 00 00 00 # Chunk Size      : 0x00000012(18)
+01 00       # Autdio Format   : 0x0001(1)
+01 00       # Num Channels    : 0x0001(1)
+44 ac 00 00 # Sample Rate     : 0x0000ac44(44100)
+88 58 01 00 # Byte Rate       : 0x00015888(88200) Bytes/Second (44.1kHz*2)
+02 00       # Block Align     : 0x0002            <- ?
+10 00       # Bits per Sample : 0x0010(16)
+00 00       # Extra Param Size: 0x0000(0)
