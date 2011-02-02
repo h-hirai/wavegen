@@ -81,13 +81,33 @@ main = do
       num_samples = 44100
       riffChunk = RIFF (fromIntegral (4 +
                                       B.length packedFmt +
-                                      4 + 4 + num_samples * 2))
-      dataChunkHeader = DATA (fromIntegral num_samples * 2)
+                                      4 + 4 + num_samples * 8 * 2))
+      dataChunkHeader = DATA (fromIntegral num_samples * 8 * 2)
       rate = 44100
-      freq = 440
-      wave = map (sample freq) (clicks rate)
   B.putStr $ toByteString riffChunk
   B.putStr packedFmt
   B.putStr $ toByteString dataChunkHeader
+  let freq = 261.6
   mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) wave
+        map (toByteString . quantize) $ map (sample freq) (clicks rate)
+  let freq = 293.7
+  mapM_ B.putStr $ take (fromIntegral num_samples) $
+        map (toByteString . quantize) $ map (sample freq) (clicks rate)
+  let freq = 329.6
+  mapM_ B.putStr $ take (fromIntegral num_samples) $
+        map (toByteString . quantize) $ map (sample freq) (clicks rate)
+  let freq = 349.2
+  mapM_ B.putStr $ take (fromIntegral num_samples) $
+        map (toByteString . quantize) $ map (sample freq) (clicks rate)
+  let freq = 392.0
+  mapM_ B.putStr $ take (fromIntegral num_samples) $
+        map (toByteString . quantize) $ map (sample freq) (clicks rate)
+  let freq = 440.0
+  mapM_ B.putStr $ take (fromIntegral num_samples) $
+        map (toByteString . quantize) $ map (sample freq) (clicks rate)
+  let freq = 493.9
+  mapM_ B.putStr $ take (fromIntegral num_samples) $
+        map (toByteString . quantize) $ map (sample freq) (clicks rate)
+  let freq = 523.3
+  mapM_ B.putStr $ take (fromIntegral num_samples) $
+        map (toByteString . quantize) $ map (sample freq) (clicks rate)
