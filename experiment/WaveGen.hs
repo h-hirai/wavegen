@@ -71,8 +71,19 @@ clicks freq = [0, 1/freq..]
 sinwave :: Double -> Double -> Double
 sinwave f t = sin (2 * pi * f * t)
 
+sawwave :: Double -> Double -> Double
+sawwave f t =
+    if t > 1 / f then sawwave f (t - 1 / f)
+    else 2 * f * t - 1
+
 quantize :: Double -> Int16
 quantize v = truncate $ fromIntegral (maxBound::Int16) * v
+
+putWave :: (Double -> Double -> Double) -> Double -> Double -> Int -> IO()
+putWave wave rate freq dur =
+    let samples = map (toByteString . quantize) $ map (wave freq) (clicks rate)
+    in
+      mapM_ B.putStr $ take dur $ samples
 
 main :: IO ()
 main = do
@@ -87,27 +98,11 @@ main = do
   B.putStr $ toByteString riffChunk
   B.putStr packedFmt
   B.putStr $ toByteString dataChunkHeader
-  let freq = 261.6
-  mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
-  let freq = 293.7
-  mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
-  let freq = 329.6
-  mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
-  let freq = 349.2
-  mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
-  let freq = 392.0
-  mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
-  let freq = 440.0
-  mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
-  let freq = 493.9
-  mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
-  let freq = 523.3
-  mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
+  putWave sinwave rate 261.6 num_samples
+  putWave sinwave rate 293.7 num_samples
+  putWave sinwave rate 329.6 num_samples
+  putWave sinwave rate 349.2 num_samples
+  putWave sinwave rate 392.0 num_samples
+  putWave sinwave rate 440.0 num_samples
+  putWave sinwave rate 493.9 num_samples
+  putWave sinwave rate 523.3 num_samples
