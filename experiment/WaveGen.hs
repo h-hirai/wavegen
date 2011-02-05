@@ -79,11 +79,13 @@ sawwave f t =
 quantize :: Double -> Int16
 quantize v = truncate $ fromIntegral (maxBound::Int16) * v
 
-putWave :: (Double -> Double -> Double) -> Double -> Double -> Int -> IO()
-putWave wave rate freq dur =
-    let samples = map (toByteString . quantize) $ map (wave freq) (clicks rate)
-    in
-      mapM_ B.putStr $ take dur $ samples
+genWave :: (Double -> Double -> Double) -> Double -> Double -> Double ->
+           [Double]
+genWave func rate freq dur =
+    take (truncate (rate * dur)) $ map (func freq) (clicks rate)
+
+putWave :: [Double]-> IO()
+putWave = mapM_ (B.putStr . toByteString . quantize)
 
 main :: IO ()
 main = do
@@ -98,11 +100,11 @@ main = do
   B.putStr $ toByteString riffChunk
   B.putStr packedFmt
   B.putStr $ toByteString dataChunkHeader
-  putWave sawwave rate 261.6 num_samples
-  putWave sinwave rate 293.7 num_samples
-  putWave sawwave rate 329.6 num_samples
-  putWave sinwave rate 349.2 num_samples
-  putWave sawwave rate 392.0 num_samples
-  putWave sinwave rate 440.0 num_samples
-  putWave sawwave rate 493.9 num_samples
-  putWave sinwave rate 523.3 num_samples
+  putWave $ genWave sawwave rate 261.6 1
+  putWave $ genWave sinwave rate 293.7 1
+  putWave $ genWave sawwave rate 329.6 1
+  putWave $ genWave sinwave rate 349.2 1
+  putWave $ genWave sawwave rate 392.0 1
+  putWave $ genWave sinwave rate 440.0 1
+  putWave $ genWave sawwave rate 493.9 1
+  putWave $ genWave sinwave rate 523.3 1
