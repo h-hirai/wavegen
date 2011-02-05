@@ -68,8 +68,8 @@ instance Packable DataChunkHeader where
 clicks :: Double -> [Double]
 clicks freq = [0, 1/freq..]
 
-sample :: Double -> Double -> Double
-sample f t = sin (2 * pi * f * t)
+sinwave :: Double -> Double -> Double
+sinwave f t = sin (2 * pi * f * t)
 
 quantize :: Double -> Int16
 quantize v = truncate $ fromIntegral (maxBound::Int16) * v
@@ -89,25 +89,25 @@ main = do
   B.putStr $ toByteString dataChunkHeader
   let freq = 261.6
   mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sample freq) (clicks rate)
+        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
   let freq = 293.7
   mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sample freq) (clicks rate)
+        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
   let freq = 329.6
   mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sample freq) (clicks rate)
+        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
   let freq = 349.2
   mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sample freq) (clicks rate)
+        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
   let freq = 392.0
   mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sample freq) (clicks rate)
+        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
   let freq = 440.0
   mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sample freq) (clicks rate)
+        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
   let freq = 493.9
   mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sample freq) (clicks rate)
+        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
   let freq = 523.3
   mapM_ B.putStr $ take (fromIntegral num_samples) $
-        map (toByteString . quantize) $ map (sample freq) (clicks rate)
+        map (toByteString . quantize) $ map (sinwave freq) (clicks rate)
