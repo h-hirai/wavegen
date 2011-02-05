@@ -98,11 +98,11 @@ main = do
   B.putStr $ toByteString riffChunk
   B.putStr packedFmt
   B.putStr $ toByteString dataChunkHeader
-  putWave sinwave rate 261.6 num_samples
+  putWave sawwave rate 261.6 num_samples
   putWave sinwave rate 293.7 num_samples
-  putWave sinwave rate 329.6 num_samples
+  putWave sawwave rate 329.6 num_samples
   putWave sinwave rate 349.2 num_samples
-  putWave sinwave rate 392.0 num_samples
+  putWave sawwave rate 392.0 num_samples
   putWave sinwave rate 440.0 num_samples
-  putWave sinwave rate 493.9 num_samples
+  putWave sawwave rate 493.9 num_samples
   putWave sinwave rate 523.3 num_samples
