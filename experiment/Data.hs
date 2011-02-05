@@ -16,8 +16,13 @@ instance Packable Int16 where
 clicks :: Double -> [Double]
 clicks freq = [0, 1/freq..]
 
-sample :: Double -> Double -> Double
-sample f t = sin (2 * pi * f * t)
+sinwave :: Double -> Double -> Double
+sinwave f t = sin (2 * pi * f * t)
+
+sawwave :: Double -> Double -> Double
+sawwave f t =
+    if t > 1 / f then sawwave f (t - 1 / f)
+    else 2 * f * t - 1
 
 quantize :: Double -> Int16
 quantize v = truncate $ fromIntegral (maxBound::Int16) * v
@@ -25,6 +30,6 @@ quantize v = truncate $ fromIntegral (maxBound::Int16) * v
 main = do
   let rate = 44100
       freq = 440
-      wave = map (sample freq) (clicks rate)
+      wave = map (sinwave freq) (clicks rate)
       pack = toByteString . quantize
   mapM_ B.putStr $ take 100 $ map pack wave
