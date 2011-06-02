@@ -7,28 +7,24 @@ import Data.Word
 import Data.Int
 import Data.Bits
 
+byteSelect :: (Bits a, Num b, Integral a) => Int -> a -> b
+byteSelect idx b =
+    fromIntegral $ (b .&. (0xff `shiftL` (idx * 8))) `shiftR` (idx * 8)
+
 class Packable a where
     toByteString :: a -> B.ByteString
 
 instance Packable Word32 where
     toByteString i =
-        fromIntegral (i .&. 0x000000ff) `B.cons`
-        (fromIntegral ((i .&. 0x0000ff00) `shiftR` 8) `B.cons`
-         (fromIntegral ((i .&. 0x00ff0000) `shiftR` 16) `B.cons`
-          (fromIntegral ((i .&. 0xff000000) `shiftR` 24) `B.cons`
-           B.empty)))
+        foldr (\idx b -> byteSelect idx i `B.cons` b) B.empty [0..3]
 
 instance Packable Word16 where
     toByteString i =
-        fromIntegral (i .&. 0x00ff) `B.cons`
-        (fromIntegral ((i .&. 0xff00) `shiftR` 8) `B.cons`
-         B.empty)
+        foldr (\idx b -> byteSelect idx i `B.cons` b) B.empty [0..1]
 
 instance Packable Int16 where
     toByteString i =
-        fromIntegral (i .&. 0x00ff) `B.cons`
-        (fromIntegral ((i .&. 0xff00) `shiftR` 8) `B.cons`
-         B.empty)
+        foldr (\idx b -> byteSelect idx i `B.cons` b) B.empty [0..1]
 
 data RIFFchunk = RIFF Word32
 
