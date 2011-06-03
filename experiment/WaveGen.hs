@@ -8,8 +8,7 @@ import Data.Int
 import Data.Bits
 
 byteSelect :: (Bits a, Num b, Integral a) => Int -> a -> b
-byteSelect idx b =
-    fromIntegral $ (b .&. (0xff `shiftL` (idx * 8))) `shiftR` (idx * 8)
+byteSelect idx b = fromIntegral $ (b `shiftR` (idx * 8)) .&. 0xff
 
 class Packable a where
     toByteString :: a -> B.ByteString
